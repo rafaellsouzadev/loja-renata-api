@@ -9,8 +9,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.rafael.lojarenata.domain.Categoria;
+import com.rafael.lojarenata.domain.Cidade;
+import com.rafael.lojarenata.domain.Estado;
 import com.rafael.lojarenata.domain.Produto;
 import com.rafael.lojarenata.repositories.CategoriaRepository;
+import com.rafael.lojarenata.repositories.CidadeRepository;
+import com.rafael.lojarenata.repositories.EstadoRepository;
 import com.rafael.lojarenata.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -21,6 +25,12 @@ public class LojaRenataApiApplication implements CommandLineRunner{
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired
+	private EstadoRepository estadoRepository;
+	
+	@Autowired
+	private CidadeRepository cidadeRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LojaRenataApiApplication.class, args);
@@ -49,7 +59,15 @@ public class LojaRenataApiApplication implements CommandLineRunner{
 		
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
 		
+		Estado est1 = new Estado(null, "Ceará");
 		
+		Cidade cid1 = new Cidade(null, "Fortaleza", est1);
+		
+		est1.getCidades().addAll(Arrays.asList(cid1));
+		
+		estadoRepository.saveAll(Arrays.asList(est1));
+		
+		cidadeRepository.saveAll(Arrays.asList(cid1));
 		
 		
 	}
