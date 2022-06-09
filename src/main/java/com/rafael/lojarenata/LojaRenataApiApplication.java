@@ -10,10 +10,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.rafael.lojarenata.domain.Categoria;
 import com.rafael.lojarenata.domain.Cidade;
+import com.rafael.lojarenata.domain.Cliente;
+import com.rafael.lojarenata.domain.Endereco;
 import com.rafael.lojarenata.domain.Estado;
 import com.rafael.lojarenata.domain.Produto;
+import com.rafael.lojarenata.domain.enums.TipoCliente;
 import com.rafael.lojarenata.repositories.CategoriaRepository;
 import com.rafael.lojarenata.repositories.CidadeRepository;
+import com.rafael.lojarenata.repositories.ClienteRepository;
+import com.rafael.lojarenata.repositories.EnderecoRepository;
 import com.rafael.lojarenata.repositories.EstadoRepository;
 import com.rafael.lojarenata.repositories.ProdutoRepository;
 
@@ -31,6 +36,12 @@ public class LojaRenataApiApplication implements CommandLineRunner{
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LojaRenataApiApplication.class, args);
@@ -69,6 +80,17 @@ public class LojaRenataApiApplication implements CommandLineRunner{
 		
 		cidadeRepository.saveAll(Arrays.asList(cid1));
 		
+		Cliente cli1 = new Cliente(null, "Rafael de Souza", "rafael-souza4@outlook.com", "73066731065", TipoCliente.PESSOAFISICA);
+		cli1.getTelefone().addAll(Arrays.asList("(85) 99230-6668"));
+		
+		Endereco e1 = new Endereco(null, "Rua Dr. Manoel Moreira", "359", "casa c altos", "Maraponga", "60433213", cli1, cid1);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1));
+		
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		
+		enderecoRepository.saveAll(Arrays.asList(e1));
 		
 	}
 
