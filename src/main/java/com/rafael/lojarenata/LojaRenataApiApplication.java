@@ -1,6 +1,7 @@
 package com.rafael.lojarenata;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,20 @@ import com.rafael.lojarenata.domain.Cidade;
 import com.rafael.lojarenata.domain.Cliente;
 import com.rafael.lojarenata.domain.Endereco;
 import com.rafael.lojarenata.domain.Estado;
+import com.rafael.lojarenata.domain.Pagamento;
+import com.rafael.lojarenata.domain.PagamentoAvistaOuPix;
+import com.rafael.lojarenata.domain.PagamentoComCartao;
+import com.rafael.lojarenata.domain.Pedido;
 import com.rafael.lojarenata.domain.Produto;
+import com.rafael.lojarenata.domain.enums.EstadoPagamento;
 import com.rafael.lojarenata.domain.enums.TipoCliente;
 import com.rafael.lojarenata.repositories.CategoriaRepository;
 import com.rafael.lojarenata.repositories.CidadeRepository;
 import com.rafael.lojarenata.repositories.ClienteRepository;
 import com.rafael.lojarenata.repositories.EnderecoRepository;
 import com.rafael.lojarenata.repositories.EstadoRepository;
+import com.rafael.lojarenata.repositories.PagamentoRepository;
+import com.rafael.lojarenata.repositories.PedidoRepository;
 import com.rafael.lojarenata.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -42,6 +50,12 @@ public class LojaRenataApiApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LojaRenataApiApplication.class, args);
@@ -92,6 +106,24 @@ public class LojaRenataApiApplication implements CommandLineRunner{
 		
 		enderecoRepository.saveAll(Arrays.asList(e1));
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("10/06/2022 10:08"), cli1, e1);
+		
+		Pedido ped2 = new Pedido(null, sdf.parse("22/06/2022 08:00"), cli1, e1);
+		
+		Pagamento pagto1 = new PagamentoAvistaOuPix(null, EstadoPagamento.QUITADO, ped2, sdf.parse("22/06/2022 08:30"));
+		ped2.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComCartao(null, EstadoPagamento.PENDENTE, ped1, 3);
+		ped1.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 	}
 
 }
