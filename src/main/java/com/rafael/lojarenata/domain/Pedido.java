@@ -1,6 +1,7 @@
 package com.rafael.lojarenata.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class Pedido implements Serializable{
 
@@ -25,6 +28,7 @@ public class Pedido implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instante;
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")	
@@ -48,6 +52,14 @@ public class Pedido implements Serializable{
 		this.instante = instante;		
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
+	}
+	
+	public BigDecimal getValorTotal() {
+		BigDecimal soma = BigDecimal.ZERO;
+		for (ItemPedido ip : itens) {
+			soma = soma.add(ip.getSubTotal());
+		}
+		return soma;
 	}
 
 	public Integer getId() {

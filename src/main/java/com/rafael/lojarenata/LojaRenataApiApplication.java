@@ -132,7 +132,7 @@ public class LojaRenataApiApplication implements CommandLineRunner{
 		
 		ItemPedido ip1 = new ItemPedido(ped2, p4, BigDecimal.ZERO, 1,new BigDecimal(11.90));
 		
-		ItemPedido ip2 = new ItemPedido(ped1, p2, BigDecimal.ZERO, 2, new BigDecimal(20.00));
+		ItemPedido ip2 = new ItemPedido(ped1, p2, BigDecimal.ZERO, 2, new BigDecimal(9.50));
 		
 		ped1.getItens().addAll(Arrays.asList(ip2));
 		ped2.getItens().addAll(Arrays.asList(ip1));
